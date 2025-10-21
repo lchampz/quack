@@ -54,8 +54,9 @@ export class WebSocketService extends EventEmitter {
   }
 
   private handleMessage(ws: WebSocket, rawData: string): void {
-    const message = this.messageService.parseMessage(rawData);
-    if (!message) return;
+    try {
+      const message = this.messageService.parseMessage(rawData);
+      if (!message) return;
 
     // Verificar se é mensagem de join
     if (message.type === 'join') {
@@ -95,6 +96,10 @@ export class WebSocketService extends EventEmitter {
       // Broadcast para outros clientes na sala
       this.roomService.broadcastToRoom(clientMeta.roomId, message, { ws, meta: clientMeta });
       this.emit('message-received', { roomId: clientMeta.roomId, message });
+    }
+    } catch (error) {
+      console.error('[WebSocketService] Erro ao processar mensagem:', error);
+      this.emit('error', error as Error);
     }
   }
 

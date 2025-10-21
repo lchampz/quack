@@ -64,7 +64,11 @@ export class QuackServer extends EventEmitter {
 
   start(): Promise<void> {
     return new Promise((resolve, reject) => {
-      this.server.listen(this.port, () => {
+      // Configurar timeouts para evitar 502 errors
+      this.server.keepAliveTimeout = 120000; // 120 segundos
+      this.server.headersTimeout = 120000;   // 120 segundos
+      
+      this.server.listen(this.port, '0.0.0.0', () => {
         console.log(`🚀 Servidor Quack rodando na porta ${this.port}`);
         console.log(`📡 WebSocket disponível em ws://localhost:${this.port}/ws`);
         console.log(`🌐 HTTP disponível em http://localhost:${this.port}`);
@@ -107,5 +111,6 @@ process.on('SIGINT', async () => {
 
 server.start().catch((error) => {
   console.error('[QuackServer] Erro ao iniciar servidor:', error);
+  console.error('[QuackServer] Stack trace:', error.stack);
   process.exit(1);
 });
