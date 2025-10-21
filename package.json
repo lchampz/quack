@@ -1,0 +1,21 @@
+{
+  "name": "quack-monorepo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Monorepo para aplicação de chamadas de voz Quack",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev:client": "cd client && pnpm dev",
+    "dev:server": "cd server && vercel dev",
+    "build:client": "cd client && pnpm build",
+    "deploy:client": "cd client && vercel --prod",
+    "deploy:server": "cd server && vercel --prod",
+    "deploy:all": "./deploy.sh"
+  },
+  "devDependencies": {
+    "vercel": "^38.0.0"
+  }
+}

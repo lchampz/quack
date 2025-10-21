@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Teste WebSocket</title>
+  </head>
+  <body>
+    <h1>Teste de Conexão WebSocket</h1>
+    <div id="status">Conectando...</div>
+    <div id="logs"></div>
+
+    <script>
+      const status = document.getElementById("status");
+      const logs = document.getElementById("logs");
+
+      function log(message) {
+        console.log(message);
+        logs.innerHTML +=
+          "<div>" + new Date().toLocaleTimeString() + ": " + message + "</div>";
+      }
+
+      const ws = new WebSocket("wss://quack-server-e0lt.onrender.com/ws");
+
+      ws.onopen = function () {
+        status.textContent = "Conectado!";
+        status.style.color = "green";
+        log("WebSocket conectado com sucesso");
+
+        // Enviar mensagem de teste
+        ws.send(
+          JSON.stringify({
+            type: "join",
+            senderId: "test-user",
+            payload: { roomId: "test-room" },
+          })
+        );
+      };
+
+      ws.onmessage = function (event) {
+        log("Mensagem recebida: " + event.data);
+      };
+
+      ws.onerror = function (error) {
+        status.textContent = "Erro de conexão";
+        status.style.color = "red";
+        log("Erro: " + error);
+      };
+
+      ws.onclose = function () {
+        status.textContent = "Desconectado";
+        status.style.color = "orange";
+        log("Conexão fechada");
+      };
+    </script>
+  </body>
+</html>
