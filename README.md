@@ -33,4 +33,3 @@ npm start
 - **Frontend**: React + TypeScript + Tailwind CSS
 - **Backend**: Node.js + WebSocket
 - **Hospedagem**: Vercel (cliente) + Render (servidor)
-- **Sinalização**: WebSocket real (não localStorage)
